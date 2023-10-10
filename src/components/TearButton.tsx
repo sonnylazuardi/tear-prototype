@@ -8,6 +8,7 @@ interface Props {
 }
 
 const TearButton = ({ title }: Props) => {
+  const [isDragging, setIsDragging] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
@@ -16,6 +17,7 @@ const TearButton = ({ title }: Props) => {
 
   const handleDragStart = (event: any, info: any) => {
     if (ref.current) {
+      setIsDragging(true);
       //@ts-ignore
       const rect = ref.current?.getBoundingClientRect();
       //@ts-ignore
@@ -25,6 +27,10 @@ const TearButton = ({ title }: Props) => {
         y: rect.top - parentRect.top,
       });
     }
+  };
+
+  const handleDragStop = () => {
+    setIsDragging(false);
   };
 
   const handleDrag = (event: any, info: any) => {
@@ -63,14 +69,16 @@ const TearButton = ({ title }: Props) => {
             drag
             onDrag={handleDrag}
             onDragStart={handleDragStart}
+            onDragEnd={handleDragStop}
             dragMomentum={false}
-            className="bg-[#B9F921] text-white rounded-full w-[32px] h-[32px] flex items-center justify-center absolute left-1 top-1 active:opacity-0"
+            className="bg-[#B9F921] text-white rounded-full w-[32px] h-[32px] flex items-center justify-center absolute left-1 top-1 active:opacity-0 "
           >
             →
           </motion.div>
           <motion.div
-            className="bg-neutral-400 w-[0px] h-[38px] absolute top-0 left-1 rounded-r-full pointer-events-none opacity-50"
+            className="bg-neutral-300 w-[0px] h-[38px] absolute top-0 left-1 rounded-r-full pointer-events-none"
             style={{
+              opacity: isDragging ? 1 : 0,
               transformOrigin: "0% 19px",
               rotate: line.rotation,
               width: line.width + 16,
