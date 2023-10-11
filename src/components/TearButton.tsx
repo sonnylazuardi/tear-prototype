@@ -17,7 +17,6 @@ const TearButton = ({ title }: Props) => {
 
   const handleDragStart = (event: any, info: any) => {
     if (ref.current) {
-      setIsDragging(true);
       //@ts-ignore
       const rect = ref.current?.getBoundingClientRect();
       //@ts-ignore
@@ -67,6 +66,7 @@ const TearButton = ({ title }: Props) => {
           <motion.div
             ref={ref}
             drag
+            onMouseDown={() => setIsDragging(true)}
             onDrag={handleDrag}
             onDragStart={handleDragStart}
             onDragEnd={handleDragStop}
